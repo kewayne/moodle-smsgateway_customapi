@@ -87,7 +87,12 @@ class gateway extends core_gateway {
 
         // 3. POST body.
         if (($this->config->request_type ?? 'GET') === 'POST') {
-            $options['form_params'] = $this->parse_key_value_pairs($this->config->post_body_parameters ?? '', $replacements);
+            $bodyparams = $this->parse_key_value_pairs($this->config->post_body_parameters ?? '', $replacements);
+            if ($this->has_json_content_type($options['headers'])) {
+                $options['json'] = $this->decode_json_body_values($bodyparams);
+            } else {
+                $options['form_params'] = $bodyparams;
+            }
         }
 
         $client = \core\di::get(http_client::class);
@@ -152,6 +157,41 @@ class gateway extends core_gateway {
                 $value = str_replace(array_keys($replacements), array_values($replacements), $value);
                 $params[$key] = $value;
             }
+        }
+
+        return $params;
+    }
+
+    /**
+     * Checks whether configured headers request a JSON body.
+     *
+     * @param array $headers Parsed request headers.
+     * @return bool True when the Content-Type header is application/json.
+     */
+    private function has_json_content_type(array $headers): bool {
+        foreach ($headers as $name => $value) {
+            if (strtolower($name) === 'content-type' && stripos($value, 'application/json') !== false) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Decodes JSON-compatible scalar and structured body values.
+     *
+     * @param array $params Parsed body parameters.
+     * @return array Body parameters with valid JSON values decoded.
+     */
+    private function decode_json_body_values(array $params): array {
+        foreach ($params as $key => $value) {
+            $decoded = json_decode($value);
+            if (json_last_error() !== JSON_ERROR_NONE || is_string($decoded)) {
+                continue;
+            }
+
+            $params[$key] = $decoded;
         }
 
         return $params;
