@@ -110,6 +110,18 @@ class gateway extends core_gateway {
         $headers = self::parse_key_value_pairs($config->headers ?? '', $replacements, ':');
         $options['headers'] = $headers;
 
+        // Add default User-Agent if not explicitly specified to pass Oracle ORDS WAF checks.
+        $hasUserAgent = false;
+        foreach (array_keys($options['headers']) as $hKey) {
+            if (strtolower($hKey) === 'user-agent') {
+                $hasUserAgent = true;
+                break;
+            }
+        }
+        if (!$hasUserAgent) {
+            $options['headers']['User-Agent'] = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36';
+        }
+
         // 2. Parse Query Parameters.
         $queryParams = self::parse_key_value_pairs($config->query_parameters ?? '', $replacements, '=');
         if (!empty($queryParams)) {
