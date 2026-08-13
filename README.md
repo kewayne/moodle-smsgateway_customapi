@@ -2,77 +2,68 @@
 
 **Author:** Kewayne Davidson  
 **License:** GNU GPL v3 or later  
-**Requires:** Moodle 4.1+ (SMS Gateway Subsystem)  
-**Version:** 1.1.0  
+**Requires:** Moodle 4.4+ (SMS Gateway Subsystem)  
+**Version:** 1.1.0 (`2026081300`)  
 
 ---
 
 ## 1. Overview
 
-The **Custom API SMS Gateway** (`smsgateway_customapi`) is a powerful, versatile Moodle plugin designed to connect Moodle's native SMS messaging framework to any third-party SMS or HTTP API provider.
+The **Custom API SMS Gateway** (`smsgateway_customapi`) is a powerful, highly customizable Moodle plugin designed to connect Moodle's native SMS messaging subsystem (`core_sms`) and Multi-Factor Authentication (MFA) to any third-party SMS, WhatsApp, or HTTP API provider.
 
-Featuring a Postman-like configuration interface, the plugin gives site administrators full control to build, customize, and test outbound API requests with custom HTTP methods (GET, POST, PUT, PATCH), HTTP headers, query parameters, form data, or raw JSON payloads.
+Featuring a Postman-like configuration interface, the plugin gives site administrators full flexibility to configure HTTP endpoints, request methods (`GET`, `POST`, `PUT`, `PATCH`, `DELETE`), custom headers, query parameters, form parameters, or raw JSON payloads.
 
 ---
 
-## 2. Key Features
+## 2. Key Features in v1.1.0
 
-* **Postman-Style Interface:** Clear, organized layout for endpoints, headers, query parameters, body payloads, and response conditions.
-* **Multiple HTTP Methods & Formats:**
-  * Support for `GET`, `POST`, `PUT`, and `PATCH` requests.
-  * Choice of request body payload format:
-    * **Form Data:** `application/x-www-form-urlencoded` key-value pairs.
-    * **JSON Payload:** `application/json` raw JSON payload.
-    * **Raw Text:** Custom text body.
-* **Dynamic Placeholders:** Easily inject recipient numbers (`{{recipient}}`) and message text (`{{message}}`) into headers, query parameters, or JSON payloads.
-* **Embedded Live Connection Tester:** Test your API connection in real time directly from the settings page before saving. Features a Postman-style response card with HTTP status badges, latency meter, response body viewer (with JSON auto-formatting), request details, and response headers.
-* **Custom Success Conditions:** Verify messages using HTTP status codes (2xx) or specific response body substrings (e.g. `"status":"success"`).
-* **Moodle Standard Compliance:** Fully compliant with Moodle core SMS gateway specifications, AJAX Web Services, AMD JavaScript standards, and Privacy API requirements for official directory distribution.
+* **Postman-Style Configuration Interface:**
+  * Clean, tabbed layout for endpoints, headers, query parameters, body payloads, and response verification.
+  * Support for `GET`, `POST`, `PUT`, `PATCH`, and `DELETE` HTTP methods.
+  * Choice of payload format: **JSON Payload** (`application/json`), **Form Data** (`application/x-www-form-urlencoded`), or **Raw Text**.
+* **Live JSON Auto-Beautifier:**
+  * 1-Click **Format / Beautify JSON** button automatically formats raw or messy JSON payloads into clean, 2-space indented JSON structures while preserving placeholders.
+* **Real-Time JSON Syntax Validator:**
+  * Live status indicator badge alerts administrators to JSON syntax errors (missing quotes, unclosed braces, trailing commas) in real time as they type.
+* **Quick Placeholder Chips:**
+  * Instant insertion buttons (`+ {{recipient}}` and `+ {{message}}`) insert variables directly at the text cursor position.
+* **Automatic JSON String Escaping:**
+  * Automatically JSON-encodes message placeholders when formatting JSON payloads to prevent API parse errors on Multi-Factor Authentication (MFA) codes, double quotes, and multi-line SMS messages.
+* **Embedded Live Connection Tester:**
+  * Test your API connection directly from the settings page before saving. Features a Postman-style response card with HTTP status badges, latency meter, pretty-printed response body, sent request summary, and response headers.
+* **Custom Success Conditions:**
+  * Verify message delivery using HTTP 2xx status codes or response body substrings (e.g. `"status":"success"`).
+* **Moodle Core Standards Compliant:**
+  * Registered Web Services in `db/services.php`, 100% localized language strings in `lang/en/smsgateway_customapi.php`, AMD JavaScript modules, and Privacy API compliance.
 
 ---
 
 ## 3. Installation
 
-1. **Upload / Extract:** Ensure the plugin files are placed in the directory:  
+1. **Upload / Extract:** Ensure the plugin files are placed in:  
    `your_moodle_site/sms/gateway/customapi/`
-2. **Database Upgrade:** Log in to Moodle as an administrator and go to **Site administration** > **Notifications**. Follow the prompts to upgrade the Moodle database.
+2. **Database Upgrade:** Log in as an administrator and go to **Site administration** > **Notifications** to complete the installation.
 
 ---
 
 ## 4. Configuration Guide
 
-Navigate to **Site administration** > **Plugins** > **SMS** > **SMS Gateways**, select **Custom API Gateway** from the gateway dropdown, and click **Add**.
+Navigate to **Site administration** > **Plugins** > **SMS** > **SMS Gateways**, select **Custom API Gateway** from the dropdown, and click **Add**.
 
 ### Endpoint Settings
-* **API URL:** The full destination URL (e.g., `https://api.provider.com/v1/send`).
-* **HTTP Method:** Select `GET`, `POST`, `PUT`, or `PATCH`.
+* **API URL:** The destination URL (e.g., `https://api.smsprovider.com/v1/send`).
+* **HTTP Method:** Select `GET`, `POST`, `PUT`, `PATCH`, or `DELETE`.
 
 ### Request Setup (Postman Style)
-* **HTTP Headers:** One per line in `Key: Value` format (e.g. `Authorization: Bearer my_api_key`).
-* **Query Parameters:** Key=value pairs appended to the URL after `?`.
-* **Request Body Format:**
-  * Select **JSON Payload** to send raw JSON like:
-    ```json
-    {
-      "to": "{{recipient}}",
-      "text": "{{message}}"
-    }
-    ```
-  * Select **Form Data** for standard key=value lines:
-    ```
-    recipient={{recipient}}
-    message={{message}}
-    ```
-
-### Response Verification
-* **Success Condition Substring:** Text string required in the response body (e.g., `"status":"ok"`). Leave empty to check for HTTP 2xx status codes.
-
-### Embedded Connection Tester
-Enter a test phone number and sample message text, then click **Send Test Request**. The embedded tester executes the request via Moodle AJAX web services and displays:
-* Response HTTP status badge & roundtrip latency (ms).
-* Pretty-formatted response body.
-* Sent request summary (URL, method, headers, payload sent).
-* Response headers.
+* **HTTP Headers:** One per line in `Key: Value` format (e.g. `Authorization: Bearer your_token`).
+* **Query Parameters:** Key=value pairs appended after `?`.
+* **JSON Payload:**
+  ```json
+  {
+    "to": "{{recipient}}",
+    "text": "{{message}}"
+  }
+  ```
 
 ---
 
