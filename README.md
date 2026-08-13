@@ -3,7 +3,7 @@
 **Author:** Kewayne Davidson  
 **License:** GNU GPL v3 or later  
 **Requires:** Moodle 4.1+ (SMS Gateway Subsystem)  
-**Version:** 1.1.0  
+**Version:** 1.1.1  
 
 ---
 
@@ -25,10 +25,11 @@ Featuring a Postman-like configuration interface, the plugin gives site administ
     * **JSON Payload:** `application/json` raw JSON payload.
     * **Raw Text:** Custom text body.
 * **Dynamic Placeholders:** Easily inject recipient numbers (`{{recipient}}`) and message text (`{{message}}`) into headers, query parameters, or JSON payloads.
-* **Live JSON Auto-Beautifier (New in v1.1.0):** 1-Click **Format / Beautify JSON** button automatically formats raw or messy JSON payloads into clean, 2-space indented JSON structures while preserving placeholders.
-* **Real-Time JSON Syntax Validator (New in v1.1.0):** Live status badge alerts administrators to JSON syntax errors (missing quotes, unclosed braces, trailing commas) in real time as they type.
-* **Quick Placeholder Chips (New in v1.1.0):** Instant insertion buttons (`+ {{recipient}}` and `+ {{message}}`) insert variables directly at the text cursor position.
-* **Automatic JSON String Escaping (New in v1.1.0):** Automatically JSON-encodes message placeholders when formatting JSON payloads to prevent API parse errors on Multi-Factor Authentication (MFA) codes, double quotes, and multi-line SMS messages.
+* **Live JSON Auto-Beautifier:** 1-Click **Format / Beautify JSON** button automatically formats raw or messy JSON payloads into clean, 2-space indented JSON structures while preserving placeholders.
+* **Real-Time JSON Syntax Validator:** Live status badge alerts administrators to JSON syntax errors (missing quotes, unclosed braces, trailing commas) in real time as they type.
+* **Quick Placeholder Chips:** Instant insertion buttons (`+ {{recipient}}` and `+ {{message}}`) insert variables directly at the text cursor position.
+* **Automatic JSON String Escaping:** Automatically JSON-encodes message placeholders when formatting JSON payloads to prevent API parse errors on Multi-Factor Authentication (MFA) codes, double quotes, and multi-line SMS messages.
+* **Browser User-Agent Emulation (New in v1.1.1):** Automatically includes legitimate browser headers to bypass Web Application Firewall (WAF) filtering on Oracle ORDS and enterprise API gateways.
 * **Embedded Live Connection Tester:** Test your API connection in real time directly from the settings page before saving. Features a Postman-style response card with HTTP status badges, latency meter, response body viewer (with JSON auto-formatting), request details, and response headers.
 * **Custom Success Conditions:** Verify messages using HTTP status codes (2xx) or specific response body substrings (e.g. `"status":"success"`).
 * **Moodle Standard Compliance:** Fully compliant with Moodle core SMS gateway specifications, AJAX Web Services, AMD JavaScript standards, and Privacy API requirements for official directory distribution.
